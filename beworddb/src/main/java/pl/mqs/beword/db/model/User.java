@@ -5,12 +5,14 @@ import java.util.Date;
 import javax.persistence.Id;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.Table;
 
 /**
  * Created by mzwolinski on 8/4/17.
  */
 
 @Entity
+@Table(name="user")
 public class User {
     @Id
     @GeneratedValue

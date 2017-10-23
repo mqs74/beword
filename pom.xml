@@ -14,11 +14,13 @@
         <java.version>1.8</java.version>
         <jee.version>6.0</jee.version>
         <spring.version>5.0.0.RELEASE</spring.version>
+        <spring.data.version>2.0.0.RELEASE</spring.data.version>
+        <spring.boot.version>1.5.8.RELEASE</spring.boot.version>
         <log4j.version>2.9.1</log4j.version>
-        <junit.version>4.12</junit.version>
-        <junit.jupiter.version>5.0.1</junit.jupiter.version>
-        <junit.vintage.version>${junit.version}.1</junit.vintage.version>
-        <junit.platform.version>1.0.1</junit.platform.version>
+        <!--<junit.version>4.12</junit.version>-->
+        <!--<junit.jupiter.version>5.0.1</junit.jupiter.version>-->
+        <!--<junit.vintage.version>${junit.version}.1</junit.vintage.version>-->
+        <!--<junit.platform.version>1.0.1</junit.platform.version>-->
 	</properties>
 
     <modules>
@@ -27,26 +29,92 @@
 
     <repositories>
         <repository>
-            <id>repository.spring.release</id>
-            <name>Spring GA Repository</name>
-            <url>http://repo.spring.io/release</url>
+            <id>spring-release</id>
+            <name>Spring Releases</name>
+            <url>https://repo.spring.io/release</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-libs-release</id>
+            <name>Spring Releases</name>
+            <url>https://repo.spring.io/libs-release</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>org.jboss.repository.releases</id>
+            <name>JBoss Maven Release Repository</name>
+            <url>https://repository.jboss.org/nexus/content/repositories/releases</url>
         </repository>
     </repositories>
 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-releases</id>
+            <name>Spring Releases</name>
+            <url>https://repo.spring.io/libs-release</url>
+        </pluginRepository>
+    </pluginRepositories>
+
 	<dependencyManagement>
 		<dependencies>
+            <!-- Java -->
             <dependency>
                 <groupId>javax</groupId>
                 <artifactId>javaee-api</artifactId>
                 <version>${jee.version}</version>
                 <scope>provided</scope>
             </dependency>
+
+            <!-- Spring -->
+            <!--<dependency>-->
+            <!--<groupId>org.springframework</groupId>-->
+            <!--<artifactId>spring-framework-bom</artifactId>-->
+            <!--<version>5.0.0.RELEASE</version>-->
+            <!--<scope>import</scope>-->
+            <!--<type>pom</type>-->
+            <!--</dependency>-->
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context</artifactId>
                 <version>${spring.version}</version>
                 <scope>provided</scope>
             </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>${spring.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+                <version>${spring.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data</artifactId>
+                <version>${spring.data.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-jpa</artifactId>
+                <version>${spring.data.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${spring.boot.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- Logger -->
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-api</artifactId>
@@ -59,23 +127,31 @@
                 <version>${log4j.version}</version>
                 <scope>provided</scope>
             </dependency>
+            <!--<dependency>-->
+                <!--<groupId>org.junit.jupiter</groupId>-->
+                <!--<artifactId>junit-jupiter-api</artifactId>-->
+                <!--<version>${junit.jupiter.version}</version>-->
+                <!--<scope>test</scope>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+                <!--<groupId>junit</groupId>-->
+                <!--<artifactId>junit</artifactId>-->
+                <!--<version>${junit.version}</version>-->
+                <!--<scope>test</scope>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+                <!--<groupId>org.apiguardian</groupId>-->
+                <!--<artifactId>apiguardian-api</artifactId>-->
+                <!--<version>1.0.0</version>-->
+                <!--<scope>test</scope>-->
+            <!--</dependency>-->
+
+            <!-- H2 -->
             <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-api</artifactId>
-                <version>${junit.jupiter.version}</version>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
                 <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apiguardian</groupId>
-                <artifactId>apiguardian-api</artifactId>
-                <version>1.0.0</version>
-                <scope>test</scope>
+                <version>1.4.194</version>
             </dependency>
         </dependencies>
 	</dependencyManagement>
@@ -92,50 +168,38 @@
                         <target>${java.version}</target>
                     </configuration>
                 </plugin>
-                <!--<plugin>-->
-                    <!--<groupId>org.apache.maven.plugins</groupId>-->
-                    <!--<artifactId>maven-jar-plugin</artifactId>-->
-                    <!--<version>3.0.2</version>-->
-                    <!--<configuration>-->
-                        <!--<archive>-->
-                            <!--<manifest>-->
-                                <!--<addDefaultImplementationEntries>true</addDefaultImplementationEntries>-->
-                            <!--</manifest>-->
-                            <!--<manifestEntries>-->
-                                <!--<Implementation-Build>$\{buildNumber}</Implementation-Build>-->
-                            <!--</manifestEntries>-->
-                            <!--&lt;!&ndash;<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>&ndash;&gt;-->
-                        <!--</archive>-->
-                    <!--</configuration>-->
-                <!--</plugin>-->
                 <plugin>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.20.1</version>
-                    <configuration>
-                        <includes>
-                            <include>**/Test*.java</include>
-                            <include>**/*Test.java</include>
-                            <include>**/*Tests.java</include>
-                            <include>**/*TestCase.java</include>
-                        </includes>
-                        <properties>
-                            <!-- <includeTags>fast</includeTags> -->
-                            <excludeTags>slow</excludeTags>
-                            <!--
-                            <configurationParameters>
-                                junit.jupiter.conditions.deactivate = *
-                            </configurationParameters>
-                            -->
-                        </properties>
-                    </configuration>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.junit.platform</groupId>
-                            <artifactId>junit-platform-surefire-provider</artifactId>
-                            <version>${junit.platform.version}</version>
-                        </dependency>
-                    </dependencies>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
                 </plugin>
+                <!--<plugin>-->
+                    <!--<artifactId>maven-surefire-plugin</artifactId>-->
+                    <!--<version>2.20.1</version>-->
+                    <!--<configuration>-->
+                        <!--<includes>-->
+                            <!--<include>**/Test*.java</include>-->
+                            <!--<include>**/*Test.java</include>-->
+                            <!--<include>**/*Tests.java</include>-->
+                            <!--<include>**/*TestCase.java</include>-->
+                        <!--</includes>-->
+                        <!--<properties>-->
+                            <!--&lt;!&ndash; <includeTags>fast</includeTags> &ndash;&gt;-->
+                            <!--<excludeTags>slow</excludeTags>-->
+                            <!--&lt;!&ndash;-->
+                            <!--<configurationParameters>-->
+                                <!--junit.jupiter.conditions.deactivate = *-->
+                            <!--</configurationParameters>-->
+                            <!--&ndash;&gt;-->
+                        <!--</properties>-->
+                    <!--</configuration>-->
+                    <!--<dependencies>-->
+                        <!--<dependency>-->
+                            <!--<groupId>org.junit.platform</groupId>-->
+                            <!--<artifactId>junit-platform-surefire-provider</artifactId>-->
+                            <!--<version>${junit.platform.version}</version>-->
+                        <!--</dependency>-->
+                    <!--</dependencies>-->
+                <!--</plugin>-->
                 <!--<plugin>-->
                     <!--<groupId>org.codehaus.mojo</groupId>-->
                     <!--<artifactId>sonar-maven-plugin</artifactId>-->
