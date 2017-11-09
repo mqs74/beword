@@ -59,61 +59,15 @@
         </pluginRepository>
     </pluginRepositories>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.8.RELEASE</version>
+        <relativePath /> <!-- lookup parent from repository -->
+    </parent>
+
 	<dependencyManagement>
 		<dependencies>
-            <!-- Java -->
-            <dependency>
-                <groupId>javax</groupId>
-                <artifactId>javaee-api</artifactId>
-                <version>${jee.version}</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <!-- Spring -->
-            <!--<dependency>-->
-            <!--<groupId>org.springframework</groupId>-->
-            <!--<artifactId>spring-framework-bom</artifactId>-->
-            <!--<version>5.0.0.RELEASE</version>-->
-            <!--<scope>import</scope>-->
-            <!--<type>pom</type>-->
-            <!--</dependency>-->
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context</artifactId>
-                <version>${spring.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-core</artifactId>
-                <version>${spring.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-beans</artifactId>
-                <version>${spring.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.data</groupId>
-                <artifactId>spring-data</artifactId>
-                <version>${spring.data.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.data</groupId>
-                <artifactId>spring-data-jpa</artifactId>
-                <version>${spring.data.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-test</artifactId>
-                <version>${spring.boot.version}</version>
-                <scope>test</scope>
-            </dependency>
-
             <!-- Logger -->
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
@@ -127,31 +81,13 @@
                 <version>${log4j.version}</version>
                 <scope>provided</scope>
             </dependency>
-            <!--<dependency>-->
-                <!--<groupId>org.junit.jupiter</groupId>-->
-                <!--<artifactId>junit-jupiter-api</artifactId>-->
-                <!--<version>${junit.jupiter.version}</version>-->
-                <!--<scope>test</scope>-->
-            <!--</dependency>-->
-            <!--<dependency>-->
-                <!--<groupId>junit</groupId>-->
-                <!--<artifactId>junit</artifactId>-->
-                <!--<version>${junit.version}</version>-->
-                <!--<scope>test</scope>-->
-            <!--</dependency>-->
-            <!--<dependency>-->
-                <!--<groupId>org.apiguardian</groupId>-->
-                <!--<artifactId>apiguardian-api</artifactId>-->
-                <!--<version>1.0.0</version>-->
-                <!--<scope>test</scope>-->
-            <!--</dependency>-->
 
-            <!-- H2 -->
+            <!-- Java DB -->
             <dependency>
-                <groupId>com.h2database</groupId>
-                <artifactId>h2</artifactId>
+                <groupId>org.hsqldb</groupId>
+                <artifactId>hsqldb</artifactId>
+                <version>2.4.0</version>
                 <scope>test</scope>
-                <version>1.4.194</version>
             </dependency>
         </dependencies>
 	</dependencyManagement>
@@ -159,52 +95,21 @@
 	<build>
 		<pluginManagement>
 			<plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.7.0</version>
-                    <configuration>
-                        <source>${java.version}</source>
-                        <target>${java.version}</target>
-                    </configuration>
-                </plugin>
+                <!--<plugin>-->
+                    <!--<groupId>org.apache.maven.plugins</groupId>-->
+                    <!--<artifactId>maven-compiler-plugin</artifactId>-->
+                    <!--<version>3.7.0</version>-->
+                    <!--<configuration>-->
+                        <!--<source>${java.version}</source>-->
+                        <!--<target>${java.version}</target>-->
+                    <!--</configuration>-->
+                <!--</plugin>-->
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>1.5.8.RELEASE</version>
                 </plugin>
-                <!--<plugin>-->
-                    <!--<artifactId>maven-surefire-plugin</artifactId>-->
-                    <!--<version>2.20.1</version>-->
-                    <!--<configuration>-->
-                        <!--<includes>-->
-                            <!--<include>**/Test*.java</include>-->
-                            <!--<include>**/*Test.java</include>-->
-                            <!--<include>**/*Tests.java</include>-->
-                            <!--<include>**/*TestCase.java</include>-->
-                        <!--</includes>-->
-                        <!--<properties>-->
-                            <!--&lt;!&ndash; <includeTags>fast</includeTags> &ndash;&gt;-->
-                            <!--<excludeTags>slow</excludeTags>-->
-                            <!--&lt;!&ndash;-->
-                            <!--<configurationParameters>-->
-                                <!--junit.jupiter.conditions.deactivate = *-->
-                            <!--</configurationParameters>-->
-                            <!--&ndash;&gt;-->
-                        <!--</properties>-->
-                    <!--</configuration>-->
-                    <!--<dependencies>-->
-                        <!--<dependency>-->
-                            <!--<groupId>org.junit.platform</groupId>-->
-                            <!--<artifactId>junit-platform-surefire-provider</artifactId>-->
-                            <!--<version>${junit.platform.version}</version>-->
-                        <!--</dependency>-->
-                    <!--</dependencies>-->
-                <!--</plugin>-->
-                <!--<plugin>-->
-                    <!--<groupId>org.codehaus.mojo</groupId>-->
-                    <!--<artifactId>sonar-maven-plugin</artifactId>-->
-                    <!--<version>2.6</version>-->
-                <!--</plugin>-->
+
 			</plugins>
 		</pluginManagement>
 	</build>

@@ -1,33 +1,55 @@
 package pl.mqs.beword.db.model;
 
+import pl.mqs.beword.db.util.ModelConsts;
+
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
-import javax.persistence.Id;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by mzwolinski on 8/4/17.
  */
 
 @Entity
-@Table(name="user")
-public class User {
+@Table(name = "user")
+public class User implements Serializable {
+    private static final long serialVersionUID = -3009157732242241606L;
+
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    private Integer type;
     private String firstName;
     private String lastName;
-    private Date birthDate;
-    private Short type;
+    private LocalDate birthDate;
 
-    public Long getId() {
+    public User() {
+        type = null;
+        firstName = null;
+        lastName = null;
+        birthDate = null;
+    }
+
+    public User(Integer type, String firstName, String lastName, LocalDate birthDate) {
+        this.type = type;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     public String getFirstName() {
@@ -46,30 +68,29 @@ public class User {
         this.lastName = lastName;
     }
 
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
-    public Short getType() {
-        return type;
-    }
-
-    public void setType(Short type) {
-        this.type = type;
-    }
-
-    @Override public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", birthDate=" + birthDate +
-                ", type=" + type +
-                '}';
+    @Override
+    public String toString() {
+        return new StringBuilder().
+                append(this.getClass()).
+                append("[id=").
+                append(id).
+                append(", type=").
+                append(type).
+                append(", firstName=").
+                append(firstName).
+                append(", lastName=").
+                append(lastName).
+                append(", birthDate=").
+                append(birthDate.format(DateTimeFormatter.ofPattern(ModelConsts.DATE_FORMAT))).
+                append("]").toString();
     }
 }
 
