@@ -1,13 +1,12 @@
 package pl.mqs.beword.db.model;
 
-import pl.mqs.beword.db.util.ModelConsts;
-
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.util.List;
 
 import javax.persistence.*;
+
+import pl.mqs.beword.db.util.DateHelper;
 
 /**
  * Created by mzwolinski on 8/4/17.
@@ -25,6 +24,9 @@ public class User implements Serializable {
     private String firstName;
     private String lastName;
     private LocalDate birthDate;
+    
+    @OneToMany
+    private List<Credential> credentials;
 
     public User() {
         type = null;
@@ -76,21 +78,35 @@ public class User implements Serializable {
         this.birthDate = birthDate;
     }
 
-    @Override
+    public List<Credential> getCredentials() {
+		return credentials;
+	}
+
+	public void setCredentials(List<Credential> credentials) {
+		this.credentials = credentials;
+	}
+
+	@Override
     public String toString() {
-        return new StringBuilder().
-                append(this.getClass()).
-                append("[id=").
-                append(id).
-                append(", type=").
-                append(type).
-                append(", firstName=").
-                append(firstName).
-                append(", lastName=").
-                append(lastName).
-                append(", birthDate=").
-                append(birthDate.format(DateTimeFormatter.ofPattern(ModelConsts.DATE_FORMAT))).
-                append("]").toString();
+		StringBuilder builder = new StringBuilder();
+		
+		builder.append(this.getClass()).
+        append("->[id=").
+        append(id).
+        append(", type=").
+        append(type).
+        append(", firstName=").
+        append(firstName).
+        append(", lastName=").
+        append(lastName).
+        append(", birthDate=").
+        append(DateHelper.getDateAsString(birthDate)).
+        append("], credentials={");
+		
+		if(credentials != null)
+			credentials.forEach(credential -> builder.append("->").append(credential.toString()));
+		
+        return builder.append("}").toString();
     }
 }
 

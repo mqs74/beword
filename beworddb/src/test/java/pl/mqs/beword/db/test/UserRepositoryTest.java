@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import org.junit.Test;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,8 +33,8 @@ public class UserRepositoryTest {
     private static User secondUser;
     private static User thirdUser;
 
-    @BeforeClass
-    public static void setUp() {
+    @Before
+    public void setUp() {
         userBirthDate = LocalDate.parse(DataConsts.birthDay, DateTimeFormatter.ofPattern(ModelConsts.DATE_FORMAT));
         firstUser = new User(0,"Jack", "Smith", userBirthDate);
         secondUser = new User(1,"Jan", "Dzban", userBirthDate);
@@ -52,13 +52,13 @@ public class UserRepositoryTest {
     public void should_store_a_customer() {
         User user = repository.save(firstUser);
 
+        System.out.println(user.toString());
+        
         assertThat(user).hasFieldOrPropertyWithValue("type", firstUser.getType());
         assertThat(user).hasFieldOrPropertyWithValue("firstName", firstUser.getFirstName());
         assertThat(user).hasFieldOrPropertyWithValue("lastName", firstUser.getLastName());
         assertThat(user.getBirthDate().format(DateTimeFormatter.ofPattern(ModelConsts.DATE_FORMAT))).isEqualTo(
                 firstUser.getBirthDate().format(DateTimeFormatter.ofPattern(ModelConsts.DATE_FORMAT)));
-
-        user.toString();
     }
 
     @Test
@@ -71,27 +71,14 @@ public class UserRepositoryTest {
         assertThat(repository.findAll()).isEmpty();
     }
 
-//    @Test
-//    public void should_find_all_customers() {
-//        entityManager.persist(firstUser);
-//        entityManager.persist(secondUser);
-//        entityManager.persist(thirdUser);
-//
-//        Iterable<User> users = repository.findAll();
-//
-//        assertThat(users).hasSize(3).contains(firstUser, secondUser, thirdUser);
-//    }
-//
-//    @Test
-//    public void should_find_customer_by_id() {
-//        User customer1 = new User("Jack", "Smith");
-//        entityManager.persist(customer1);
-//
-//        User customer2 = new User("Adam", "Johnson");
-//        entityManager.persist(customer2);
-//
-//        User foundCustomer = repository.findOne(customer2.getId());
-//
-//        assertThat(foundCustomer).isEqualTo(customer2);
-//    }
+    @Test
+    public void should_find_customer_by_id() {
+        entityManager.persist(firstUser);
+        entityManager.persist(secondUser);
+        entityManager.persist(thirdUser);
+
+        User foundCustomer = repository.findOne(secondUser.getId());
+
+        assertThat(foundCustomer).isEqualTo(secondUser);
+    }
 }
