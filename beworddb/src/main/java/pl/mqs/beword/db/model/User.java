@@ -2,15 +2,13 @@ package pl.mqs.beword.db.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
 
 import pl.mqs.beword.db.util.DateHelper;
-
-/**
- * Created by mzwolinski on 8/4/17.
- */
+import pl.mqs.beword.db.util.StringHelper;
 
 @Entity
 @Table(name = "user")
@@ -20,38 +18,56 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private Integer type;
     private String firstName;
     private String lastName;
     private LocalDate birthDate;
     
     @OneToMany
+    private List<Role> roles;
+    
+    @OneToMany
     private List<Credential> credentials;
 
     public User() {
-        type = null;
+        roles = null;
         firstName = null;
         lastName = null;
         birthDate = null;
     }
 
-    public User(Integer type, String firstName, String lastName, LocalDate birthDate) {
-        this.type = type;
+    public User(String firstName, String lastName, LocalDate birthDate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
+        
+        this.roles = null;
+        this.credentials = null;
     }
 
     public long getId() {
         return id;
     }
 
-    public Integer getType() {
-        return type;
+    public List<Role> getRoles() {
+        return roles;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+    
+    public void addRole(Role role) {
+    	if(this.roles == null)
+    		roles = new ArrayList<Role>();
+    	
+    	this.roles.add(role);
+    }
+    
+    public void addRoles(List<Role> roles) {
+    	if(this.roles == null)
+    		roles = new ArrayList<Role>();
+    	
+    	this.roles.addAll(roles);
     }
 
     public String getFirstName() {
@@ -87,26 +103,30 @@ public class User implements Serializable {
 	}
 
 	@Override
-    public String toString() {
+	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		
-		builder.append(this.getClass()).
-        append("->[id=").
-        append(id).
-        append(", type=").
-        append(type).
-        append(", firstName=").
-        append(firstName).
-        append(", lastName=").
-        append(lastName).
-        append(", birthDate=").
-        append(DateHelper.getDateAsString(birthDate)).
-        append("], credentials={");
+		builder.append(StringHelper.CLASS_OPEN_BRACKET).
+			append(this.getClass()).
+        	append(StringHelper.NESTED_POINTER).
+        	append("id=").
+        	append(id).
+        	append(", firstName=").
+        	append(firstName).
+        	append(", lastName=").
+        	append(lastName).
+        	append(", birthDate=").
+        	append(DateHelper.getDateAsString(birthDate)).
+        	append(", credentials={");
 		
 		if(credentials != null)
-			credentials.forEach(credential -> builder.append("->").append(credential.toString()));
+			credentials.forEach(credential -> builder.append(credential.toString()));
 		
-        return builder.append("}").toString();
-    }
+		builder.append("}, roles={");
+		
+		if(roles != null)
+			roles.forEach(role -> builder.append(role.toString()));
+		
+        return builder.append("}").append(StringHelper.CLASS_CLOSE_BRACKET).toString();
+	}
 }
-

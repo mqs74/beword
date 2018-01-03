@@ -14,10 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
+import pl.mqs.beword.db.model.Role;
 import pl.mqs.beword.db.model.User;
-import pl.mqs.beword.db.repository.UserRepository;
-import pl.mqs.beword.db.test.utils.DataConsts;
 import pl.mqs.beword.db.util.ModelConsts;
+import pl.mqs.beword.db.test.utils.DataConsts;
+import pl.mqs.beword.db.repository.UserRepository;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -36,9 +37,11 @@ public class UserRepositoryTest {
     @Before
     public void setUp() {
         userBirthDate = LocalDate.parse(DataConsts.birthDay, DateTimeFormatter.ofPattern(ModelConsts.DATE_FORMAT));
-        firstUser = new User(0,"Jack", "Smith", userBirthDate);
-        secondUser = new User(1,"Jan", "Dzban", userBirthDate);
-        thirdUser = new User(2,"Kazik", "Grotołazik", userBirthDate);
+        firstUser = new User("Jack", "Smith", userBirthDate);
+        secondUser = new User("Jan", "Dzban", userBirthDate);
+        thirdUser = new User("Kazik", "Grotołazik", userBirthDate);
+       
+        firstUser.addRole(new Role(1, "test", "test role", userBirthDate));
     }
 
     @Test
@@ -54,7 +57,7 @@ public class UserRepositoryTest {
 
         System.out.println(user.toString());
         
-        assertThat(user).hasFieldOrPropertyWithValue("type", firstUser.getType());
+        //assertThat(user).hasFieldOrPropertyWithValue("type", firstUser.getType());
         assertThat(user).hasFieldOrPropertyWithValue("firstName", firstUser.getFirstName());
         assertThat(user).hasFieldOrPropertyWithValue("lastName", firstUser.getLastName());
         assertThat(user.getBirthDate().format(DateTimeFormatter.ofPattern(ModelConsts.DATE_FORMAT))).isEqualTo(

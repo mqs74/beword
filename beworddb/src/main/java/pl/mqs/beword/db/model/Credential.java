@@ -1,12 +1,13 @@
 package pl.mqs.beword.db.model;
 
-import java.io.Serializable;
 import java.time.LocalDate;
+import java.io.Serializable;
 
 import javax.persistence.*;
 
 import pl.mqs.beword.db.util.DateHelper;
 import pl.mqs.beword.db.util.MockupHelper;
+import pl.mqs.beword.db.util.StringHelper;
 
 @Entity
 @Table(name = "credential")
@@ -66,23 +67,24 @@ public class Credential implements Serializable {
         isValid = valid;
     }
 
+    @Override
     public String toString() {
-        return new StringBuilder().
-                append(this.getClass()).
-                append("->[id=").
+    	return new StringBuilder().
+    			append(StringHelper.CLASS_OPEN_BRACKET).
+    			append(this.getClass()).
+                append(StringHelper.NESTED_POINTER).
+                append("id=").
                 append(id).
                 append(", type=").
                 append(type).
-                append("], login=[").
+                append(", login=").
                 append(login).
-                append("], password=[").
+                append(", password=").
                 append(MockupHelper.mockupPassword(password)).
-                append("], validTo=[").
+                append(", validTo=").
                 append(DateHelper.getDateAsString(validTo)).
-                append("], isValid=[").
+                append(", isValid=").
                 append(isValid).
-                append("]").
-                toString();
+                append(StringHelper.CLASS_CLOSE_BRACKET).toString();
     }
 }
-
