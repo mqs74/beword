@@ -16,14 +16,21 @@ public class Credential implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
     private Integer type;
     private String login;
     private String password;
     private LocalDate validTo;
     private Boolean isValid;
 
-    public Integer getId() {
+    public Credential() {}
+    
+    public Credential(Integer type, String login) {
+    	this.type = type;
+    	this.login = login;
+    }
+    
+    public Long getId() {
         return id;
     }
 

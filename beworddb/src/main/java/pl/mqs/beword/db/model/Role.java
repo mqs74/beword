@@ -1,5 +1,6 @@
 package pl.mqs.beword.db.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
 import java.io.Serializable;
@@ -20,7 +21,7 @@ public class Role implements Serializable {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+	private Long id;
 	private Integer type;
 	private String name;
 	
@@ -32,6 +33,9 @@ public class Role implements Serializable {
 	
 	@OneToMany
     private List<Credential> credentials;
+	
+	@OneToMany
+	private List<Privilege> privileges;
 
 	public Role(Integer type, String name, String description, LocalDate validTo) {
 		this.type = type;
@@ -40,12 +44,8 @@ public class Role implements Serializable {
 		this.validTo = validTo;
 	}
 	
-	public Integer getId() {
+	public Long getId() {
 		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public Integer getType() {
@@ -88,6 +88,42 @@ public class Role implements Serializable {
 		this.credentials = credentials;
 	}
 	
+	public void addCredential(Credential credential) {
+    	if(this.credentials == null)
+    		this.credentials = new ArrayList<Credential>();
+    	
+    	this.credentials.add(credential);
+    }
+	
+	 public void addCredentials(List<Credential> credentials) {
+		if(this.credentials == null)
+			this.credentials = new ArrayList<Credential>();
+	    	
+	    this.credentials.addAll(credentials);
+	 }
+	 
+	public List<Privilege> getPrivileges() {
+		return privileges;
+	}
+
+	public void setPrivileges(List<Privilege> privileges) {
+		this.privileges = privileges;
+	}
+
+	public void addPrivilege(Privilege privilege) {
+		if(this.privileges == null)
+			this.privileges = new ArrayList<Privilege>();
+		
+		privileges.add(privilege);
+	}
+	
+	public void addPrivileges(List<Privilege> privileges) {
+		if(this.privileges == null)
+			this.privileges = new ArrayList<Privilege>();
+		
+		this.privileges.addAll(privileges);
+	}
+	
 	@Override
 	public String toString()
 	{
@@ -110,6 +146,11 @@ public class Role implements Serializable {
 			
 			if(credentials != null)
 				credentials.forEach(credential -> builder.append(credential.toString()));
+			
+			builder.append("}, privileges={");
+			
+			if(privileges != null)
+				privileges.forEach(privilege -> builder.append(privilege.toString()));
 			
 			return builder.append("}").append(StringHelper.CLASS_CLOSE_BRACKET).toString();
 	}

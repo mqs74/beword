@@ -4,9 +4,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import org.junit.Test;
+import org.hamcrest.core.IsNull;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
+import static org.junit.Assert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.springframework.test.context.junit4.SpringRunner;
@@ -14,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
+import pl.mqs.beword.db.model.Address;
+import pl.mqs.beword.db.model.Credential;
+import pl.mqs.beword.db.model.Privilege;
 import pl.mqs.beword.db.model.Role;
 import pl.mqs.beword.db.model.User;
 import pl.mqs.beword.db.util.ModelConsts;
@@ -33,6 +38,11 @@ public class UserRepositoryTest {
     private static User firstUser;
     private static User secondUser;
     private static User thirdUser;
+    private static Role testerRole;
+  
+    private static Address fooAddress;
+    private static Credential fooCredential;
+    private static Privilege fooPrivilege;
 
     @Before
     public void setUp() {
@@ -41,7 +51,17 @@ public class UserRepositoryTest {
         secondUser = new User("Jan", "Dzban", userBirthDate);
         thirdUser = new User("Kazik", "Grotołazik", userBirthDate);
        
-        firstUser.addRole(new Role(1, "test", "test role", userBirthDate));
+        fooAddress = new Address(5, "Wrzeciono", "8a", "3", "Wejherowo", "09-515", "Polska");
+        
+        fooCredential = new Credential(1, "foo");
+        fooPrivilege = new Privilege(2, "FOO_PRIVILEGE", "Foo privilege for Bar access", LocalDate.now().plusDays(1));
+        
+        testerRole = new Role(1, "test", "test role", userBirthDate);
+        testerRole.addCredential(fooCredential); 
+        testerRole.addPrivilege(fooPrivilege);
+        
+        firstUser.addAddress(fooAddress);
+        firstUser.addRole(testerRole);
     }
 
     @Test
@@ -57,11 +77,17 @@ public class UserRepositoryTest {
 
         System.out.println(user.toString());
         
-        //assertThat(user).hasFieldOrPropertyWithValue("type", firstUser.getType());
         assertThat(user).hasFieldOrPropertyWithValue("firstName", firstUser.getFirstName());
         assertThat(user).hasFieldOrPropertyWithValue("lastName", firstUser.getLastName());
         assertThat(user.getBirthDate().format(DateTimeFormatter.ofPattern(ModelConsts.DATE_FORMAT))).isEqualTo(
                 firstUser.getBirthDate().format(DateTimeFormatter.ofPattern(ModelConsts.DATE_FORMAT)));
+        assertThat(user.getAddresses().size()).isEqualTo(1);
+        assertThat(user.getAddresses()).contains(fooAddress);
+        assertThat(user.getCredentials(), IsNull.nullValue());
+        assertThat(user.getRoles().size()).isEqualTo(1);
+        assertThat(user.getRoles()).contains(testerRole);
+        assertThat(user.getRoles().get(0).getCredentials().size()).isEqualTo(1);
+        assertThat(user.getRoles().get(0).getCredentials()).contains(fooCredential);       
     }
 
     @Test

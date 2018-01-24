@@ -17,7 +17,7 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
     private String firstName;
     private String lastName;
     private LocalDate birthDate;
@@ -27,6 +27,9 @@ public class User implements Serializable {
     
     @OneToMany
     private List<Credential> credentials;
+    
+    @OneToMany
+    private List<Address> addresses;
 
     public User() {
         roles = null;
@@ -44,7 +47,7 @@ public class User implements Serializable {
         this.credentials = null;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -58,14 +61,14 @@ public class User implements Serializable {
     
     public void addRole(Role role) {
     	if(this.roles == null)
-    		roles = new ArrayList<Role>();
+    		this.roles = new ArrayList<Role>();
     	
     	this.roles.add(role);
     }
     
     public void addRoles(List<Role> roles) {
     	if(this.roles == null)
-    		roles = new ArrayList<Role>();
+    		this.roles = new ArrayList<Role>();
     	
     	this.roles.addAll(roles);
     }
@@ -102,6 +105,28 @@ public class User implements Serializable {
 		this.credentials = credentials;
 	}
 
+	public List<Address> getAddresses() {
+		return addresses;
+	}
+
+	public void setAddresses(List<Address> addresses) {
+		this.addresses = addresses;
+	}
+	
+	public void addAddress(Address address) {
+		if(addresses == null)
+			addresses = new ArrayList<Address>();
+		
+		addresses.add(address);
+	}
+	
+	public void addAddresses(List<Address> addresses) {
+		if(this.addresses == null)
+			this.addresses = new ArrayList<Address>();
+		
+		this.addresses.addAll(addresses);
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -126,6 +151,11 @@ public class User implements Serializable {
 		
 		if(roles != null)
 			roles.forEach(role -> builder.append(role.toString()));
+		
+		builder.append("}, addresses={");
+		
+		if(addresses != null)
+			addresses.forEach(address -> builder.append(address.toString()));
 		
         return builder.append("}").append(StringHelper.CLASS_CLOSE_BRACKET).toString();
 	}
