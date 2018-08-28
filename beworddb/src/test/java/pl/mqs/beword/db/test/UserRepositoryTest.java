@@ -2,7 +2,9 @@ package pl.mqs.beword.db.test;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.hamcrest.core.IsNull;
 import org.junit.Before;
@@ -11,6 +13,8 @@ import org.junit.runner.RunWith;
 import static org.junit.Assert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -27,6 +31,7 @@ import pl.mqs.beword.db.repository.UserRepository;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
+@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.HSQL)
 public class UserRepositoryTest {
     @Autowired
     private TestEntityManager entityManager;
@@ -106,8 +111,11 @@ public class UserRepositoryTest {
         entityManager.persist(secondUser);
         entityManager.persist(thirdUser);
 
-        User foundCustomer = repository.findOne(secondUser.getId());
+        Optional<User> foundCustomer = repository.findById(secondUser.getId());
 
-        assertThat(foundCustomer).isEqualTo(secondUser);
+        if(!foundCustomer.isPresent())
+            Assert.fail();
+
+        assertThat(foundCustomer.get()).isEqualTo(secondUser);
     }
 }
