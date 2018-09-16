@@ -21,14 +21,14 @@ public class User implements Serializable {
     private String firstName;
     private String lastName;
     private LocalDate birthDate;
-    
-    @OneToMany
+
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Role> roles;
-    
-    @OneToMany
+
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Credential> credentials;
-    
-    @OneToMany
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<Address> addresses;
 
     public User() {
@@ -105,6 +105,13 @@ public class User implements Serializable {
 		this.credentials = credentials;
 	}
 
+	public void addCredential(Credential credential) {
+        if(this.credentials == null)
+            this.credentials = new ArrayList<>();
+
+        credentials.add(credential);
+    }
+
 	public List<Address> getAddresses() {
 		return addresses;
 	}
@@ -114,16 +121,16 @@ public class User implements Serializable {
 	}
 	
 	public void addAddress(Address address) {
-		if(addresses == null)
-			addresses = new ArrayList<Address>();
-		
+		if(this.addresses == null)
+			this.addresses = new ArrayList<>();
+
 		addresses.add(address);
 	}
-	
+
 	public void addAddresses(List<Address> addresses) {
 		if(this.addresses == null)
-			this.addresses = new ArrayList<Address>();
-		
+			this.addresses = new ArrayList<>();
+
 		this.addresses.addAll(addresses);
 	}
 

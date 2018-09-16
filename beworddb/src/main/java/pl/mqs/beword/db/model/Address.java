@@ -2,17 +2,17 @@ package pl.mqs.beword.db.model;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import pl.mqs.beword.db.util.StringHelper;
 
 @Entity
+@Table(name = "address")
 public class Address implements Serializable {
 	private static final long serialVersionUID = -5868864142419394144L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
 	private Integer type; 

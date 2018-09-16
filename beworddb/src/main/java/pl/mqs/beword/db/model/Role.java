@@ -5,12 +5,7 @@ import java.util.List;
 import java.time.LocalDate;
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import pl.mqs.beword.db.util.DateHelper;
 import pl.mqs.beword.db.util.StringHelper;
@@ -31,10 +26,10 @@ public class Role implements Serializable {
 	@Column(nullable = true)
 	private LocalDate validTo;
 	
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
     private List<Credential> credentials;
 	
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<Privilege> privileges;
 
 	public Role(Integer type, String name, String description, LocalDate validTo) {
