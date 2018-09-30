@@ -61,12 +61,11 @@ public class UserRepositoryTest {
         fooPrivilege = new Privilege(2, "FOO_PRIVILEGE", "Foo privilege for Bar access", LocalDate.now().plusDays(1));
 
         testerRole = new Role(1, "test", "test role", userBirthDate);
-        testerRole.addCredential(fooCredential);
         testerRole.addPrivilege(fooPrivilege);
 
         firstUser.addAddress(fooAddress);
         firstUser.addRole(testerRole);
-        //firstUser.addCredential(fooCredential);
+        firstUser.addCredential(fooCredential);
     }
 
     @Test
@@ -88,11 +87,10 @@ public class UserRepositoryTest {
                 firstUser.getBirthDate().format(DateTimeFormatter.ofPattern(ModelConsts.DATE_FORMAT)));
         assertThat(user.getAddresses().size()).isEqualTo(1);
         assertThat(user.getAddresses()).contains(fooAddress);
-        assertThat(user.getCredentials(), IsNull.nullValue());
         assertThat(user.getRoles().size()).isEqualTo(1);
         assertThat(user.getRoles()).contains(testerRole);
-        assertThat(user.getRoles().get(0).getCredentials().size()).isEqualTo(1);
-        assertThat(user.getRoles().get(0).getCredentials()).contains(fooCredential);
+        assertThat(user.getCredentials().size()).isEqualTo(1);
+        assertThat(user.getCredentials()).contains(fooCredential);
     }
 
     @Test

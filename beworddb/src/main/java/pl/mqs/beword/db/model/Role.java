@@ -27,9 +27,6 @@ public class Role implements Serializable {
 	private LocalDate validTo;
 	
 	@OneToMany(cascade = CascadeType.ALL)
-    private List<Credential> credentials;
-	
-	@OneToMany(cascade = CascadeType.ALL)
 	private List<Privilege> privileges;
 
 	public Role(Integer type, String name, String description, LocalDate validTo) {
@@ -74,28 +71,6 @@ public class Role implements Serializable {
 	public void setValidTo(LocalDate validTo) {
 		this.validTo = validTo;
 	}
-
-	public List<Credential> getCredentials() {
-		return credentials;
-	}
-
-	public void setCredentials(List<Credential> credentials) {
-		this.credentials = credentials;
-	}
-	
-	public void addCredential(Credential credential) {
-    	if(this.credentials == null)
-    		this.credentials = new ArrayList<Credential>();
-    	
-    	this.credentials.add(credential);
-    }
-	
-	 public void addCredentials(List<Credential> credentials) {
-		if(this.credentials == null)
-			this.credentials = new ArrayList<Credential>();
-	    	
-	    this.credentials.addAll(credentials);
-	 }
 	 
 	public List<Privilege> getPrivileges() {
 		return privileges;
@@ -138,9 +113,6 @@ public class Role implements Serializable {
             append(", validTo=").
         	append(DateHelper.getDateAsString(validTo)).
             append(", credentials={");
-			
-			if(credentials != null)
-				credentials.forEach(credential -> builder.append(credential.toString()));
 			
 			builder.append("}, privileges={");
 			
